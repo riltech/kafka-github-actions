@@ -1,0 +1,20 @@
+---
+name: On Push
+on: push
+
+jobs:
+
+  yarn_install:
+    name: Prepare Node.JS
+    runs-on: ubuntu-latest
+    concurrency: ${{ github.ref || github.sha }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Configure Node.JS
+        uses: ./.github/actions/configure_node
+
+  test:
+    name: Test
+    needs: [yarn_install]
+    uses: ./.github/workflows/test.yaml

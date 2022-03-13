@@ -1,0 +1,19 @@
+---
+name: Configure Node.JS
+description: Configures Node.JS application and installs dependenices
+runs:
+  using: composite
+  steps:
+    - name: Configure Node.JS
+      uses: actions/setup-node@v2
+      with:
+        node-version-file: '.nvmrc'
+    - name: Configure Cache
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: node_modules-${{ hashFiles('yarn.lock') }}
+        restore-keys: node_modules-
+    - name: Install Yarn Dependencies
+      shell: bash
+      run: yarn install --frozen-lockfile

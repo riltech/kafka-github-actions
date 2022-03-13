@@ -1,0 +1,17 @@
+{
+  "name": "kafka-github-action",
+  "version": "1.0.0",
+  "description": "Showcasing integration testing with Apache Kafka and Github Actions",
+  "main": "index.js",
+  "author": "Imre Racz @ Riltech Co",
+  "license": "MIT",
+  "dependencies": {
+    "kafkajs": "^1.16.0"
+  },
+  "devDependencies": {
+    "tape": "^5.5.2"
+  },
+  "scripts": {
+    "test": "node ./test.js"
+  }
+}

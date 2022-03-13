@@ -1,0 +1,28 @@
+---
+name: Test
+on: workflow_call
+
+jobs:
+
+  integration_testing:
+    services:
+      zookeeper:
+        image: wurstmeister/zookeeper:latest
+        ports:
+          - 2181:2181
+        options: --health-cmd "netstat -an | grep 2181 > /dev/null; if [ 0 != $? ]; then exit 1; fi;" --health-interval 5s --health-retries 10
+      kafka:
+        image: wurstmeister/kafka:2.13-2.8.1
+        ports:
+          - 9092:9092
+        options: -e KAFKA_ADVERTISED_HOST_NAME=127.0.0.1 -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 -e KAFKA_AUTO_CREATE_TOPICS_ENABLE=false --health-cmd "netstat -an | grep 9092 > /dev/null; if [ 0 != $? ]; then exit 1; fi;" --health-interval 5s --health-retries 10
+    name: Tape Integration tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Configure Node.JS
+        uses: ./.github/actions/configure_node
+      - name: Run tests
+        shell: bash
+        run: yarn test
